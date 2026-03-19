@@ -53,6 +53,7 @@ public class Driver : MonoBehaviour
         {
             if (isPlayerOne) WASDMovement();
             else ArrowKeyMovement();
+            deAcc = 0.98f;
         }
         else
         {
