@@ -1,6 +1,8 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +14,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TMP_Text timeText;
 
     [SerializeField] private TMP_Text countdownText;
+
+    [SerializeField] private GameObject musicList;
+    // 0 is 321go
+    // 1 is music
+    // 2 is goalsound
+    // 3 is speed pickup
+    // 4 is loss of speed
+    // 5 is explosion
 
     private float time = 0;
     private int minutes;
@@ -81,6 +91,11 @@ public class GameManager : MonoBehaviour
         // Makes it show all nice in the text
         timeText.text = $"{minutes}:{seconds2}{seconds1}:{millisecs2}{millisecs1}";
 
+        if (Keyboard.current.escapeKey.isPressed)
+        {
+            SceneManager.LoadScene(0);
+        }
+
     }
 
     // Spawns in speed boost in one of two areas.
@@ -100,6 +115,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator Countdown()
     {
+        musicList.transform.GetChild(0).GetComponent<AudioSource>().Play();
         countdownText.text = "3";
         yield return new WaitForSeconds(1);
         countdownText.text = "2";
@@ -110,5 +126,6 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1);
         countdownText.enabled = false;
         gameIsOver = false;
+        musicList.transform.GetChild(1).GetComponent<AudioSource>().Play();
     }
 }

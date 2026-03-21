@@ -36,6 +36,14 @@ public class Driver : MonoBehaviour
     [SerializeField] private GameObject winScreen;
     [SerializeField] private TMP_Text winText;
 
+    [SerializeField] private GameObject musicList;
+    // 0 is 321go
+    // 1 is music
+    // 2 is goalsound
+    // 3 is speed pickup
+    // 4 is loss of speed
+    // 5 is explosion
+
     void Start()
     {
         moveAmount = 0;
@@ -127,6 +135,8 @@ public class Driver : MonoBehaviour
             {
                 YouWin();
             }
+
+            musicList.transform.GetChild(2).GetComponent<AudioSource>().Play();
         }
     }
 
@@ -137,6 +147,11 @@ public class Driver : MonoBehaviour
         {
             isOnRoad = false;
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        musicList.transform.GetChild(5).GetComponent<AudioSource>().Play();
     }
 
     // Movement for Player 1 (on the left)
@@ -224,7 +239,9 @@ public class Driver : MonoBehaviour
     private IEnumerator SpeedBoost()
     {
         speedBoost = true;
+        musicList.transform.GetChild(3).GetComponent<AudioSource>().Play();
         yield return new WaitForSeconds(10);
+        if (speedBoost) musicList.transform.GetChild(4).GetComponent<AudioSource>().Play();
         speedBoost = false;
     }
 
@@ -232,6 +249,7 @@ public class Driver : MonoBehaviour
     private IEnumerator GotGrabbed()
     {
         speedBoost = false;
+        if (!gotGrabbed) musicList.transform.GetChild(4).GetComponent<AudioSource>().Play();
         gotGrabbed = true;
         yield return new WaitForSeconds(3);
         gotGrabbed = false;
